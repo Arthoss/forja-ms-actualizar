@@ -25,12 +25,13 @@ get "/" do
 end
 
 # Respaldo de lectura (resiliencia): mismo formato que el microservicio Flask
+# Respaldo de lectura (resiliencia): mismo formato que el microservicio Flask
 get "/api/tip" do
   tip = con_db do |db|
-    db.exec("SELECT texto, categoria FROM tips ORDER BY random() LIMIT 1").first
+    db.exec("SELECT id, texto, categoria FROM tips ORDER BY random() LIMIT 1").first
   end
   if tip
-    json_ok({ texto: tip["texto"], categoria: tip["categoria"] })
+    json_ok({ id: tip["id"].to_i, texto: tip["texto"], categoria: tip["categoria"] })
   else
     json_ok({ error: "No hay tips" }, 404)
   end
